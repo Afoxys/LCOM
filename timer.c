@@ -6,9 +6,12 @@
 #include "i8254.h"
 
 int (timer_set_frequency)(uint8_t UNUSED(timer), uint32_t UNUSED(freq)) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
+	
+	uint8_t byte = 0;
+	//Read the timer configuration
+	byte = 0;//(byte | TIMER_RB_CMD | BIT(5)); // Must use the read-back command so that it does not change the 4 LSBs (mode and BCD/binary) of the timer's control word.
+	//int util_get_LSB(uint16_t val, uint8_t *lsb)
+	//int util_get_MSB(uint16_t val, uint8_t *msb)
   return 1;
 }
 
@@ -71,8 +74,16 @@ int (timer_get_conf)(uint8_t UNUSED(timer), uint8_t *UNUSED(st)) {
 
 
 int timer_display_conf(uint8_t UNUSED(timer), uint8_t UNUSED(st), enum timer_status_field UNUSED(field)) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
+  timer_print_config(timer, field, st)
   return 1;
+}
+
+
+int util_get_LSB(uint16_t val, uint8_t *lsb) {
+	return 1; //Returns the LSB of a 2 byte integer.
+}
+int util_get_MSB(uint16_t val, uint8_t *msb) {
+	//Poem metade do val em msb
+	//Returns the MSB of a 2 byte integer.
+	return 1;
 }
