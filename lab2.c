@@ -32,12 +32,14 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-int(timer_test_read_config)(uint8_t UNUSED(timer), enum timer_status_field UNUSED(field)) {
+int (timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
   
   /* To be completed by the students */
-	if (timer_get_config(UNUSED(timer), UNUSED(field)) != 0) { printf("Error reading clock.\n"); return 1 }
-	timer_display_config(UNUSED(timer), UNUSED(field))
-  //printf("%s is not yet implemented!\n", __func__);
+  uint8_t st = 0;
+	if (timer_get_conf(timer, &st) != 0) { 
+    return timer_display_conf(timer, st,field);
+  }
+  
   
   return 0;
 }
@@ -58,15 +60,13 @@ int(timer_test_int)(uint8_t UNUSED(time)) {
 }
 
 int(util_get_LSB)(uint16_t UNUSED(val), uint8_t *UNUSED(lsb)) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  
 
   return 1;
 }
 
 int(util_get_MSB)(uint16_t UNUSED(val), uint8_t *UNUSED(msb)) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  
 
   return 1;
 }

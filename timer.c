@@ -34,12 +34,12 @@ void (timer_int_handler)() {
   printf("%s is not yet implemented!\n", __func__);
 }
 
-int (timer_get_conf)(uint8_t UNUSED(timer), uint8_t *UNUSED(st)) {
+int (timer_get_conf)(uint8_t timer, uint8_t *st) {
 
-	uint8_t status;
-	uint8_t byte = 0;
+	
+	u32_t byte = 0;
 
-	byte = (byte | TIMER_RB_CMD | BIT(5)); //Defining byte value
+	byte = (byte | TIMER_RB_CMD | TIMER_RB_COUNT_); //Defining byte value
 
 	if (sys_outb(TIMER_CTRL, byte) != 0) { //Checking for errors in the comand sys_outb 
 		printf("Function error");
@@ -52,38 +52,53 @@ int (timer_get_conf)(uint8_t UNUSED(timer), uint8_t *UNUSED(st)) {
   switch(timer){  //Switch-case function to define the behaviour for the diffrent clocks, we will read and save the clock information in the byte variable
 
     case 0:
-		sys_inb(TIMER_0, byte);
-		sys_out(TIMER_0, &byte);
-		break;
+			sys_inb(TIMER_0, &byte);
+			break;
    
     case 1:
-		sys_inb(TIMER_1, byte);
-		sys_out(TIMER_1, &byte);
-		break;
+			sys_inb(TIMER_1, &byte);
+			break;
 
     case 2:
-		sys_inb(TIMER_2, byte);
-		sys_out(TIMER_2, &byte);
-		break;
+			sys_inb(TIMER_2, &byte);
+			break;
   }
 
-  *st = byte;
+  *st = (uint8_t)byte;
 
   return 0;
 }
 
 
-int timer_display_conf(uint8_t UNUSED(timer), uint8_t UNUSED(st), enum timer_status_field UNUSED(field)) {
-  timer_print_config(timer, field, st)
-  return 1;
+int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field field) {
+
+	union timer_status_field_val conf;
+	
+	switch(field){
+		case all:
+			conf = st;
+			break;
+		case initial:
+			switch(in_mode){
+				case INVAL_val:
+					break;
+				case LSB_only:
+					break;
+				case MSB_only:	
+					break;
+				case MSB_after_LSB:
+					break;
+			}
+		case mode:
+			conf = (st | BIT(3)| BIT(2)| BIT(1));
+			break;
+		case base:
+			conf = (st|BIT(0));
+			break;
+
+	}
+
+  timer_print_config(timer, field, conf) 
+  return 0;
 }
 
-
-int util_get_LSB(uint16_t val, uint8_t *lsb) {
-	return 1; //Returns the LSB of a 2 byte integer.
-}
-int util_get_MSB(uint16_t val, uint8_t *msb) {
-	//Poem metade do val em msb
-	//Returns the MSB of a 2 byte integer.
-	return 1;
-}
