@@ -83,17 +83,17 @@ int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field fiel
 			byte = (st | BIT(5) | BIT(4));
 			switch (byte) {
 				case 01:
-				  conf.in_mode = LSB_only;
-				  break;
+					conf.in_mode = LSB_only;
+					break;
 				case 10:
 					conf.in_mode = MSB_only;
-				  break;
+					break;
 				case 11:
-				   conf.in_mode = MSB_after_LSB;
-				  break;
-			  default:
-				  conf.in_mode = INVAL_val;
-			     break;	
+					conf.in_mode = MSB_after_LSB;
+					break;
+				default:
+					conf.in_mode = INVAL_val;
+					break;	
 			}
 		case mode:
 			conf.count_mode = (st | BIT(3) | BIT(2) | BIT(1));
