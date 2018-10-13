@@ -5,14 +5,15 @@
 
 #include "i8254.h"
 
-int (timer_set_frequency)(uint8_t UNUSED(timer), uint32_t UNUSED(freq)) {
-	
-	uint8_t byte = 0;
-	//Read the timer configuration
-	byte = 0;//(byte | TIMER_RB_CMD | BIT(5)); // Must use the read-back command so that it does not change the 4 LSBs (mode and BCD/binary) of the timer's control word.
-	//int util_get_LSB(uint16_t val, uint8_t *lsb)
-	//int util_get_MSB(uint16_t val, uint8_t *msb)
-  return 1;
+int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
+  uint8_t timers[3] = {TIMER_0, TIMER_1, TIMER_2};
+	uint8_t conf = 0;
+  if(timer_get_conf(timer, &conf)) return 1;
+  conf = conf & 0x0F; // 00001111 <- elimina os 4 primeiros bits 
+  conf = (timers[timer] | BIT(5) | BIT(6) | conf); // TTIICCCC
+  sys_outb(TIMER_CTRL, conf);
+  sys_outb(timers[timer], freq);
+  return 0;
 }
 
 int (timer_subscribe_int)(uint8_t *UNUSED(bit_no)) {
@@ -70,16 +71,16 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
 }
 
 
-int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field field) {
+int (timer_display_conf)(uint8_t timer, uint8_t UNUSED(st), enum timer_status_field field) {
 
 	union timer_status_field_val conf;
 	
 	switch(field){
 		case all:
-			conf = st;
+			//conf = st;
 			break;
 		case initial:
-			switch(in_mode){
+		/*	switch(in_mode){
 				case INVAL_val:
 					break;
 				case LSB_only:
@@ -88,17 +89,18 @@ int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field fiel
 					break;
 				case MSB_after_LSB:
 					break;
-			}
+			}*/
+      break;
 		case mode:
-			conf = (st | BIT(3)| BIT(2)| BIT(1));
+		//	conf = (st | BIT(3)| BIT(2)| BIT(1));
 			break;
 		case base:
-			conf = (st|BIT(0));
+		//	conf = (st|BIT(0));
 			break;
 
 	}
 
-  timer_print_config(timer, field, conf) 
+  timer_print_config(timer, field, conf);
   return 0;
 }
 
