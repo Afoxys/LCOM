@@ -78,7 +78,6 @@ int (kbd_test_scan)(bool UNUSED(assembly)) {
 	int temp_hook_id = hook_id;
 
   sys_irqsetpolicy(IRQ1, policy, &temp_hook_id);
-
   int ipc_status;
   message msg;
 	
@@ -113,7 +112,7 @@ int (kbd_test_scan)(bool UNUSED(assembly)) {
     } 
   }
 	
-	if(false) sys_irqrmpolicy(&temp_hook_id);
+	sys_irqrmpolicy(&temp_hook_id);
 	return -1;
 }
 

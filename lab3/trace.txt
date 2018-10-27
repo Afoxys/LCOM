@@ -1,0 +1,14 @@
+@lcflib.a:2018, lcf_start
+  kbd_test_scan(assembly)
+> kbd_test_scan(false)
+  @lab3.c:80, kbd_test_scan
+    sys_irqsetpolicy(IRQ1, policy, &temp_hook_id)
+  > sys_irqsetpolicy(1, 3, addr: 0xeffff7c4 [0])
+  < sys_irqsetpolicy(1, 3, addr: 0xeffff7c4 [10]) -> (ret: 0)
+  @lab3.c:86, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff780, addr: 0xeffff7c0)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000001]>)
+  @lab3.c:86, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff780, addr: 0xeffff7c0)
